@@ -2,7 +2,7 @@
 
 Arcep Watch is a simple Elixir console application meant to get accurate figures about **Optical Fiber deployment** in **France**, per city.
 
-Data are provided by [ARCEP](https://www.arcep.fr) and retried from from [datagouv.fr](https://www.data.gouv.fr/fr/datasets/le-marche-du-haut-et-tres-haut-debit-fixe-deploiements/)
+Data are provided by [ARCEP](https://www.arcep.fr) and retrieved from from [datagouv.fr](https://www.data.gouv.fr/fr/datasets/le-marche-du-haut-et-tres-haut-debit-fixe-deploiements/)
 
 ## Setup
 
