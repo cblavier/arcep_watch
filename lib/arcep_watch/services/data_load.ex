@@ -7,6 +7,7 @@ defmodule ArcepWatch.DataLoad do
   @base_folder "./tmp"
 
   def load(year, trimester, opts \\ []) do
+    IO.puts("loading year #{year}, trimester #{trimester}")
     zip_col = Keyword.get(opts, :zip_col, 8)
     status_col = Keyword.get(opts, :status_col, 11)
 
@@ -40,28 +41,29 @@ defmodule ArcepWatch.DataLoad do
         {Map.update(statuses_by_zip, key, 1, &(&1 + 1)), unknown_statuses}
     end)
     |> Flow.on_trigger(fn {statuses_by_zip, unknown_statuses} ->
-      Enum.each(statuses_by_zip, fn {{zip, status}, count} ->
-        case insert(year, trimester, zip, status, count) do
-          {:ok, _} -> :ok
-          _ -> :error
-        end
+      statuses_by_zip
+      |> Stream.map(fn {{zip, status}, count} ->
+        %{year: year, trimester: trimester, zip: zip, status: status, count: count}
       end)
+      |> Stream.reject(&(is_nil(&1.status) || is_nil(&1.zip)))
+      |> Stream.chunk_every(1000)
+      |> Enum.each(&Repo.insert_all(Deployment, &1))
 
       {[], unknown_statuses}
     end)
     |> Flow.run()
+
+    IO.puts("inserted #{count(year, trimester)} rows")
+    :ok
   end
 
-  defp insert(_year, _trimester, _zip, nil, _count), do: :error
-
-  defp insert(year, trimester, zip, status, count) do
-    Repo.insert(%Deployment{
-      year: String.to_integer(year),
-      trimester: String.to_integer(trimester),
-      zip: zip,
-      status: status,
-      count: count
-    })
+  defp count(year, trimester) do
+    from(
+      d in Deployment,
+      where: d.year == ^year and d.trimester == ^trimester,
+      select: count(d.id)
+    )
+    |> Repo.one()
   end
 
   defp status("deploye"), do: "deployed"
