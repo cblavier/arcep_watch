@@ -47,7 +47,15 @@ defmodule ArcepWatch.Deployment do
       &{&1.year, &1.trimester},
       &{&1.status, &1.count}
     )
-    |> Enum.map(fn {key, values} -> {key, Map.new(values)} end)
+    |> Enum.map(fn {key, values} -> {key, add_coverage(values)} end)
     |> Map.new()
+  end
+
+  defp add_coverage(count_by_status) do
+    count_by_status = Map.new(count_by_status)
+    deployed_count = Map.get(count_by_status, "deployed", 0)
+    total = count_by_status |> Map.values() |> Enum.sum()
+
+    Map.put(count_by_status, "coverage", Float.round(deployed_count / total, 2))
   end
 end

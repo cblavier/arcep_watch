@@ -12,7 +12,7 @@ defmodule Mix.Tasks.Arcep.Watch do
     {2019, 1} => [zip_col: 8, status_col: 10],
     {2019, 2} => [zip_col: 8, status_col: 10],
     {2019, 3} => [zip_col: 8, status_col: 10],
-    {2019, 4} => [zip_col: 8, status_col: 10],
+    {2019, 4} => [zip_col: 8, status_col: 11],
     {2020, 1} => [zip_col: 8, status_col: 11],
     {2020, 2} => [zip_col: 8, status_col: 11],
     {2020, 3} => [zip_col: 8, status_col: 11]
