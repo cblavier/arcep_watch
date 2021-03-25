@@ -34,6 +34,7 @@ defmodule ArcepWatch.DataDownload do
 
   defp url(year, trimester), do: dataset(year, trimester)
 
+  defp dataset(2020, 4), do: "ef8a5ae7-b3ad-4461-869b-0c19ec5bd8d6"
   defp dataset(2020, 3), do: "e269640f-15f9-45a2-8483-ac4be82e6436"
   defp dataset(2020, 2), do: "e571def3-b634-45b7-8405-6b97c30dce7e"
   defp dataset(2020, 1), do: "d6525a52-6b1b-401c-ba01-4bbeb6cc174c"
